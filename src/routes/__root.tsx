@@ -72,14 +72,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "piperush" },
+      { name: "description", content: "Piperush is a modern, animated, and responsive website for plumbing services." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "piperush" },
+      { property: "og:description", content: "Piperush is a modern, animated, and responsive website for plumbing services." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "piperush" },
+      { name: "twitter:description", content: "Piperush is a modern, animated, and responsive website for plumbing services." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a9ef6fe1-28b7-40c7-966f-ad1b3ec75ab8/id-preview-6050842a--17664f61-3c06-4409-a21d-6a26c7afbaf0.lovable.app-1779357363495.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a9ef6fe1-28b7-40c7-966f-ad1b3ec75ab8/id-preview-6050842a--17664f61-3c06-4409-a21d-6a26c7afbaf0.lovable.app-1779357363495.png" },
     ],
     links: [
       {
