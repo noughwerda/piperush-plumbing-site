@@ -1,5 +1,6 @@
 import { ArrowRight, Phone, Droplets, Wrench } from "lucide-react";
 import heroImg from "@/assets/hero-bath.jpg";
+import plumber3d from "@/assets/plumber-3d.png";
 
 export function Hero() {
   return (
@@ -70,6 +71,16 @@ export function Hero() {
           <div className="absolute -top-6 -right-6 bg-card border border-border rounded-2xl px-4 py-3 shadow-lift animate-float-slow">
             <div className="text-xs text-muted-foreground">Response time</div>
             <div className="text-lg font-display font-bold text-primary">{"< 60 min"}</div>
+          </div>
+
+          {/* Floating 3D plumber mascot */}
+          <div className="pointer-events-none absolute -bottom-10 -right-10 md:-right-16 lg:-right-20 w-40 md:w-56 lg:w-64 z-20">
+            <img
+              src={plumber3d}
+              alt="Piperush plumber mascot"
+              className="relative w-full h-auto animate-tilt-3d drop-shadow-[0_25px_25px_rgba(20,80,40,0.35)]"
+            />
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-32 md:w-44 h-4 rounded-[50%] bg-foreground/40 blur-md animate-shadow-pulse" />
           </div>
         </div>
       </div>
