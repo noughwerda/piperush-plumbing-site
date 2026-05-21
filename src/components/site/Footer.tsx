@@ -1,15 +1,10 @@
-import { Droplets } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 export function Footer() {
   return (
     <footer className="border-t border-border bg-card">
       <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
-        <div className="flex items-center gap-2">
-          <span className="w-9 h-9 rounded-xl gradient-hero text-primary-foreground flex items-center justify-center">
-            <Droplets className="w-5 h-5" />
-          </span>
-          <span className="font-display font-bold text-lg">Piperush</span>
-        </div>
+        <img src={logo} alt="Piperush" className="h-10 w-auto" />
         <p className="text-sm text-muted-foreground">
           © {new Date().getFullYear()} Piperush Plumbing Co. All rights reserved.
         </p>
