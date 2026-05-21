@@ -41,6 +41,7 @@ function Index() {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main>
+        <WrenchScene />
         <Hero />
         <About />
         <Services />
