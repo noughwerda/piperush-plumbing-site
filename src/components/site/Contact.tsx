@@ -7,7 +7,7 @@ export function Contact() {
   return (
     <section id="contact" className="py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12">
-        <div className="reveal">
+        <div className="reveal-left">
           <span className="text-xs font-semibold uppercase tracking-widest text-primary">Contact</span>
           <h2 className="mt-3 text-4xl md:text-5xl font-bold">Let's get your water flowing.</h2>
           <p className="mt-4 text-lg text-muted-foreground max-w-md">
@@ -35,7 +35,7 @@ export function Contact() {
         </div>
 
         <form
-          className="reveal bg-card border border-border rounded-3xl p-8 md:p-10 shadow-soft"
+          className="reveal-right bg-card border border-border rounded-3xl p-8 md:p-10 shadow-soft"
           onSubmit={(e) => {
             e.preventDefault();
             setSent(true);

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Menu, X, Droplets } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const links = [
   { href: "#home", label: "Home" },
@@ -31,12 +32,11 @@ export function Header() {
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <a href="#home" className="flex items-center gap-2 group">
-          <span className="relative inline-flex items-center justify-center w-9 h-9 rounded-xl gradient-hero text-primary-foreground">
-            <Droplets className="w-5 h-5" />
-          </span>
-          <span className="text-xl font-display font-bold tracking-tight">
-            Piperush
-          </span>
+          <img
+            src={logo}
+            alt="Piperush logo"
+            className="h-11 w-auto transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:scale-105"
+          />
         </a>
 
         <nav className="hidden md:flex items-center gap-8">

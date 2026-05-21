@@ -4,20 +4,20 @@ export function About() {
   return (
     <section id="about" className="py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-        <div className="reveal relative">
+        <div className="reveal-left relative" data-parallax="0.15">
           <img
             src={bathImg}
             alt="Modern bathroom installation"
-            className="rounded-3xl shadow-lift w-full h-[480px] object-cover"
+            className="parallax rounded-3xl shadow-lift w-full h-[480px] object-cover"
           />
-          <div className="absolute -bottom-6 -right-6 hidden md:block bg-card border border-border rounded-2xl p-6 shadow-lift max-w-[220px]">
+          <div className="absolute -bottom-6 -right-6 hidden md:block bg-card border border-border rounded-2xl p-6 shadow-lift max-w-[220px] reveal-zoom" style={{ transitionDelay: "300ms" }}>
             <div className="text-4xl font-display font-bold text-primary">100%</div>
             <div className="text-sm text-muted-foreground mt-1">
               Satisfaction guaranteed on every job we complete.
             </div>
           </div>
         </div>
-        <div className="reveal">
+        <div className="reveal-right">
           <span className="text-xs font-semibold uppercase tracking-widest text-primary">About Piperush</span>
           <h2 className="mt-3 text-4xl md:text-5xl font-bold">
             Craftsmanship that <span className="text-primary">flows.</span>
@@ -39,8 +39,8 @@ export function About() {
               "Transparent flat-rate quotes",
               "Eco-friendly materials",
               "Lifetime workmanship warranty",
-            ].map((t) => (
-              <div key={t} className="flex items-start gap-3">
+            ].map((t, i) => (
+              <div key={t} className="reveal flex items-start gap-3" style={{ transitionDelay: `${200 + i * 100}ms` }}>
                 <span className="mt-1.5 w-2 h-2 rounded-full bg-primary" />
                 <span className="text-sm font-medium">{t}</span>
               </div>
