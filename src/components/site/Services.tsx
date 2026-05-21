@@ -1,23 +1,27 @@
-import { Droplet, Wrench, ShieldCheck, Siren, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import dropIcon from "@/assets/icons/drop.png";
+import faucetIcon from "@/assets/icons/faucet.png";
+import wrenchIcon from "@/assets/icons/wrench.png";
+import dropSoftIcon from "@/assets/icons/drop-soft.png";
 
 const services = [
   {
-    icon: Droplet,
+    icon: dropIcon,
     title: "Leak Repair",
     desc: "Pinpoint detection and seamless repair for dripping faucets, hidden pipe leaks, and slab issues.",
   },
   {
-    icon: Wrench,
+    icon: faucetIcon,
     title: "Pipe Installation",
     desc: "New builds, remodels, and full re-pipes using premium copper, PEX, and PVC systems.",
   },
   {
-    icon: ShieldCheck,
+    icon: wrenchIcon,
     title: "Maintenance",
     desc: "Scheduled inspections, drain cleaning, and water-heater tune-ups to prevent costly failures.",
   },
   {
-    icon: Siren,
+    icon: dropSoftIcon,
     title: "Emergency Plumbing",
     desc: "24/7 rapid response for burst pipes, sewage backups, and overflow disasters — any hour.",
   },
@@ -45,8 +49,8 @@ export function Services() {
               className="reveal-zoom group relative bg-card border border-border rounded-2xl p-7 hover:shadow-lift hover:-translate-y-2 hover:border-primary/40 transition-all duration-300"
               style={{ transitionDelay: `${i * 120}ms` }}
             >
-              <div className="w-12 h-12 rounded-xl gradient-hero text-primary-foreground flex items-center justify-center group-hover:scale-110 transition-transform">
-                <s.icon className="w-6 h-6" />
+              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <img src={s.icon} alt="" className="w-8 h-8 object-contain" />
               </div>
               <h3 className="mt-5 text-xl font-bold">{s.title}</h3>
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
