@@ -27,8 +27,8 @@ export function Gallery() {
           {items.map((it, i) => (
             <div
               key={i}
-              className={`reveal group relative overflow-hidden rounded-2xl border border-border shadow-soft ${it.span ?? ""}`}
-              style={{ transitionDelay: `${i * 50}ms` }}
+              className={`reveal-blur group relative overflow-hidden rounded-2xl border border-border shadow-soft ${it.span ?? ""}`}
+              style={{ transitionDelay: `${i * 120}ms` }}
             >
               <img
                 src={it.src}
