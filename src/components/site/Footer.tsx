@@ -8,9 +8,17 @@ export function Footer() {
         <p className="text-sm text-muted-foreground">
           © {new Date().getFullYear()} Piperush Plumbing Co. All rights reserved.
         </p>
-        <div className="flex gap-6 text-sm text-muted-foreground">
+        <div className="flex items-center gap-6 text-sm text-muted-foreground">
           <a href="#services" className="hover:text-primary transition">Services</a>
           <a href="#contact" className="hover:text-primary transition">Contact</a>
+          <a
+            href="https://www.figma.com/design/Wdjz459xZkGaO9dxljPKzt/Nour-Werda?node-id=2-58&t=sMSOmgVkuk9IW4Nq-1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-1.5 text-xs font-medium hover:border-primary hover:text-primary transition"
+          >
+            Link to Figma
+          </a>
         </div>
       </div>
     </footer>
