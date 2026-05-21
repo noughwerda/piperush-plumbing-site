@@ -35,7 +35,7 @@ export function Contact() {
         </div>
 
         <form
-          className="reveal bg-card border border-border rounded-3xl p-8 md:p-10 shadow-soft"
+          className="reveal-right bg-card border border-border rounded-3xl p-8 md:p-10 shadow-soft"
           onSubmit={(e) => {
             e.preventDefault();
             setSent(true);
