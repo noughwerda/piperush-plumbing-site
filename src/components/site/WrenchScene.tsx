@@ -108,6 +108,7 @@ export function WrenchScene() {
     openGeo.center();
     const openHead = new THREE.Mesh(openGeo, chromeMat);
     openHead.rotation.z = Math.PI; // jaw opens to the left
+    openHead.rotation.x = Math.PI / 2; // rotate on X so the open jaw faces up
     openHead.position.set(-3.65, 0, 0);
     wrench.add(openHead);
 
