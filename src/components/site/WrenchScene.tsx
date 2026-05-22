@@ -79,23 +79,16 @@ export function WrenchScene() {
     rightConn.position.x = 2.85;
     wrench.add(rightConn);
 
-    // --- OPEN-END HEAD (left) — built centered on origin, then positioned ---
+    // --- OPEN-END HEAD (left) — true C-shape with an open jaw ---
     const openShape = new THREE.Shape();
-    // Outer rounded head (circle on the left side)
-    openShape.absarc(0, 0, 1.0, Math.PI * 0.35, Math.PI * 1.65, false);
-    // Right side connects back to handle
-    openShape.lineTo(0.95, -0.42);
-    openShape.lineTo(0.95, 0.42);
+    const outerRadius = 1.05;
+    const innerRadius = 0.52;
+    const jawGap = Math.PI * 0.48;
+    openShape.absarc(0, 0, outerRadius, jawGap, Math.PI * 2 - jawGap, false);
+    openShape.lineTo(Math.cos(Math.PI * 2 - jawGap) * innerRadius, Math.sin(Math.PI * 2 - jawGap) * innerRadius);
+    openShape.absarc(0, 0, innerRadius, Math.PI * 2 - jawGap, jawGap, true);
+    openShape.lineTo(Math.cos(jawGap) * outerRadius, Math.sin(jawGap) * outerRadius);
     openShape.closePath();
-
-    // U-shaped jaw opening cut out of the head
-    const jawHole = new THREE.Path();
-    jawHole.moveTo(0.2, -0.32);
-    jawHole.lineTo(-0.55, -0.32);
-    jawHole.absarc(-0.55, 0, 0.32, -Math.PI / 2, Math.PI / 2, true);
-    jawHole.lineTo(0.2, 0.32);
-    jawHole.lineTo(0.2, -0.32);
-    openShape.holes.push(jawHole);
 
     const openGeo = new THREE.ExtrudeGeometry(openShape, {
       depth: 0.42,
@@ -107,8 +100,7 @@ export function WrenchScene() {
     });
     openGeo.center();
     const openHead = new THREE.Mesh(openGeo, chromeMat);
-    openHead.rotation.z = Math.PI; // jaw opens to the left
-    openHead.rotation.x = Math.PI / 2; // rotate on X so the open jaw faces up
+    openHead.rotation.z = Math.PI; // jaw opens cleanly away from the handle
     openHead.position.set(-3.65, 0, 0);
     wrench.add(openHead);
 
@@ -138,8 +130,8 @@ export function WrenchScene() {
     let dragging = false;
     let previousX = 0;
     let previousY = 0;
-    let rotationX = 0.35;
-    let rotationY = 0.5;
+    let rotationX = 0.18;
+    let rotationY = -0.2;
 
     const canvas = renderer.domElement;
     const onDown = (e: PointerEvent) => {
