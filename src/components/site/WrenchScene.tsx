@@ -1,208 +1,15 @@
-import { useEffect, useRef } from "react";
-import * as THREE from "three";
+import { useRef, useState } from "react";
 
 export function WrenchScene() {
-  const mountRef = useRef<HTMLDivElement>(null);
+  const [rotation, setRotation] = useState({ x: 16, y: -18 });
+  const dragRef = useRef({ active: false, x: 0, y: 0, rx: 16, ry: -18 });
 
-  useEffect(() => {
-    const mount = mountRef.current;
-    if (!mount) return;
-
-    const width = mount.clientWidth;
-    const height = mount.clientHeight;
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    mount.appendChild(renderer.domElement);
-    renderer.domElement.style.cursor = "grab";
-    renderer.domElement.style.display = "block";
-
-    const scene = new THREE.Scene();
-
-    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-    camera.position.set(0, 0.5, 12);
-
-    // Lights
-    scene.add(new THREE.AmbientLight(0xffffff, 0.85));
-    const mainLight = new THREE.DirectionalLight(0xffffff, 2.6);
-    mainLight.position.set(5, 8, 6);
-    scene.add(mainLight);
-    const greenLight = new THREE.PointLight(0x22c55e, 3, 20);
-    greenLight.position.set(0, 2, 4);
-    scene.add(greenLight);
-    const fillLight = new THREE.DirectionalLight(0x86efac, 1);
-    fillLight.position.set(-4, -2, 5);
-    scene.add(fillLight);
-
-    // Materials
-    const chromeMat = new THREE.MeshPhysicalMaterial({
-      color: 0xd5dce0,
-      metalness: 1,
-      roughness: 0.18,
-      clearcoat: 1,
-      clearcoatRoughness: 0.05,
-    });
-    const greenMat = new THREE.MeshPhysicalMaterial({
-      color: 0x16a34a,
-      metalness: 0.35,
-      roughness: 0.4,
-      clearcoat: 1,
-      clearcoatRoughness: 0.08,
-    });
-
-    const wrench = new THREE.Group();
-
-    // Handle (along X axis)
-    const handle = new THREE.Mesh(new THREE.BoxGeometry(5.4, 0.7, 0.42), greenMat);
-    wrench.add(handle);
-
-    const edgeGeo = new THREE.CylinderGeometry(0.08, 0.08, 5.4, 20);
-    const topEdge = new THREE.Mesh(edgeGeo, chromeMat);
-    topEdge.rotation.z = Math.PI / 2;
-    topEdge.position.y = 0.33;
-    wrench.add(topEdge);
-    const bottomEdge = new THREE.Mesh(edgeGeo, chromeMat);
-    bottomEdge.rotation.z = Math.PI / 2;
-    bottomEdge.position.y = -0.33;
-    wrench.add(bottomEdge);
-
-    // Tapered connectors
-    const connectorGeo = new THREE.CylinderGeometry(0.35, 0.5, 0.9, 32);
-    const leftConn = new THREE.Mesh(connectorGeo, chromeMat);
-    leftConn.rotation.z = Math.PI / 2;
-    leftConn.position.x = -2.85;
-    wrench.add(leftConn);
-    const rightConn = new THREE.Mesh(connectorGeo, chromeMat);
-    rightConn.rotation.z = -Math.PI / 2;
-    rightConn.position.x = 2.85;
-    wrench.add(rightConn);
-
-    // --- OPEN-END HEAD (left) — built centered on origin, then positioned ---
-    const openShape = new THREE.Shape();
-    // Outer rounded head (circle on the left side)
-    openShape.absarc(0, 0, 1.0, Math.PI * 0.35, Math.PI * 1.65, false);
-    // Right side connects back to handle
-    openShape.lineTo(0.95, -0.42);
-    openShape.lineTo(0.95, 0.42);
-    openShape.closePath();
-
-    // U-shaped jaw opening cut out of the head
-    const jawHole = new THREE.Path();
-    jawHole.moveTo(0.2, -0.32);
-    jawHole.lineTo(-0.55, -0.32);
-    jawHole.absarc(-0.55, 0, 0.32, -Math.PI / 2, Math.PI / 2, true);
-    jawHole.lineTo(0.2, 0.32);
-    jawHole.lineTo(0.2, -0.32);
-    openShape.holes.push(jawHole);
-
-    const openGeo = new THREE.ExtrudeGeometry(openShape, {
-      depth: 0.42,
-      bevelEnabled: true,
-      bevelThickness: 0.05,
-      bevelSize: 0.04,
-      bevelSegments: 6,
-      curveSegments: 48,
-    });
-    openGeo.center();
-    const openHead = new THREE.Mesh(openGeo, chromeMat);
-    openHead.rotation.z = Math.PI; // jaw opens to the left
-    openHead.rotation.x = Math.PI / 2; // rotate on X so the open jaw faces up
-    openHead.position.set(-3.65, 0, 0);
-    wrench.add(openHead);
-
-    // --- RING HEAD (right) — centered, then positioned ---
-    const ringShape = new THREE.Shape();
-    ringShape.absarc(0, 0, 1.0, 0, Math.PI * 2, false);
-    const ringHole = new THREE.Path();
-    ringHole.absarc(0, 0, 0.55, 0, Math.PI * 2, true);
-    ringShape.holes.push(ringHole);
-
-    const ringGeo = new THREE.ExtrudeGeometry(ringShape, {
-      depth: 0.42,
-      bevelEnabled: true,
-      bevelThickness: 0.05,
-      bevelSize: 0.04,
-      bevelSegments: 6,
-      curveSegments: 48,
-    });
-    ringGeo.center();
-    const ringHead = new THREE.Mesh(ringGeo, chromeMat);
-    ringHead.position.set(3.65, 0, 0);
-    wrench.add(ringHead);
-
-    scene.add(wrench);
-
-    // Interaction
-    let dragging = false;
-    let previousX = 0;
-    let previousY = 0;
-    let rotationX = 0.35;
-    let rotationY = 0.5;
-
-    const canvas = renderer.domElement;
-    const onDown = (e: PointerEvent) => {
-      dragging = true;
-      previousX = e.clientX;
-      previousY = e.clientY;
-      canvas.style.cursor = "grabbing";
-      canvas.setPointerCapture(e.pointerId);
-    };
-    const onUp = (e: PointerEvent) => {
-      dragging = false;
-      canvas.style.cursor = "grab";
-      try { canvas.releasePointerCapture(e.pointerId); } catch {}
-    };
-    const onMove = (e: PointerEvent) => {
-      if (!dragging) return;
-      rotationY += (e.clientX - previousX) * 0.01;
-      rotationX += (e.clientY - previousY) * 0.01;
-      previousX = e.clientX;
-      previousY = e.clientY;
-    };
-    canvas.addEventListener("pointerdown", onDown);
-    canvas.addEventListener("pointermove", onMove);
-    canvas.addEventListener("pointerup", onUp);
-    canvas.addEventListener("pointercancel", onUp);
-
-    const onResize = () => {
-      const w = mount.clientWidth;
-      const h = mount.clientHeight;
-      renderer.setSize(w, h);
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-    };
-    window.addEventListener("resize", onResize);
-
-    let t = 0;
-    let raf = 0;
-    const animate = () => {
-      raf = requestAnimationFrame(animate);
-      t += 0.01;
-      if (!dragging) rotationY += 0.004;
-      wrench.position.y = Math.sin(t) * 0.15;
-      wrench.rotation.z = Math.sin(t * 0.5) * 0.05;
-      wrench.rotation.x = rotationX;
-      wrench.rotation.y = rotationY;
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("resize", onResize);
-      canvas.removeEventListener("pointerdown", onDown);
-      canvas.removeEventListener("pointermove", onMove);
-      canvas.removeEventListener("pointerup", onUp);
-      canvas.removeEventListener("pointercancel", onUp);
-      renderer.dispose();
-      if (canvas.parentNode === mount) mount.removeChild(canvas);
-    };
-  }, []);
+  const stopDrag = () => {
+    dragRef.current.active = false;
+  };
 
   return (
-    <section className="relative pt-28 pb-8 gradient-water overflow-hidden">
+    <section className="relative pt-28 pb-12 gradient-water overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 text-center">
         <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider">
           Drag to rotate
@@ -211,10 +18,55 @@ export function WrenchScene() {
           Tools of the <span className="bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">trade</span>
         </h2>
       </div>
+
       <div
-        ref={mountRef}
-        className="relative mx-auto mt-4 w-full h-[360px] md:h-[460px] cursor-grab select-none touch-none"
-      />
+        className="relative mx-auto mt-8 flex h-[320px] w-full max-w-6xl items-center justify-center overflow-hidden select-none touch-none md:h-[420px]"
+        onPointerDown={(event) => {
+          dragRef.current = {
+            active: true,
+            x: event.clientX,
+            y: event.clientY,
+            rx: rotation.x,
+            ry: rotation.y,
+          };
+          event.currentTarget.setPointerCapture(event.pointerId);
+        }}
+        onPointerMove={(event) => {
+          const drag = dragRef.current;
+          if (!drag.active) return;
+          setRotation({
+            x: Math.max(-55, Math.min(55, drag.rx - (event.clientY - drag.y) * 0.35)),
+            y: drag.ry + (event.clientX - drag.x) * 0.35,
+          });
+        }}
+        onPointerUp={stopDrag}
+        onPointerCancel={stopDrag}
+      >
+        <div className="absolute bottom-12 h-10 w-[560px] max-w-[70vw] rounded-full bg-foreground/10 blur-xl" />
+
+        <div
+          className="relative h-[170px] w-[min(780px,88vw)] cursor-grab active:cursor-grabbing transition-transform duration-75 [perspective:1000px]"
+          style={{
+            transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg) rotateZ(-8deg)`,
+            transformStyle: "preserve-3d",
+          }}
+        >
+          <div className="absolute left-[16%] top-1/2 h-14 w-[68%] -translate-y-1/2 rounded-full bg-primary shadow-lift [transform:translateZ(18px)]" />
+          <div className="absolute left-[18%] top-[calc(50%-39px)] h-4 w-[64%] rounded-full bg-card/80 [transform:translateZ(32px)]" />
+          <div className="absolute left-[18%] top-[calc(50%+23px)] h-4 w-[64%] rounded-full bg-foreground/15 [transform:translateZ(32px)]" />
+
+          <div className="absolute left-[8%] top-1/2 h-24 w-28 -translate-y-1/2 rounded-full bg-card shadow-lift [transform:translateZ(24px)]" />
+          <div className="absolute right-[8%] top-1/2 h-28 w-28 -translate-y-1/2 rounded-full bg-card shadow-lift [transform:translateZ(24px)]" />
+          <div className="absolute right-[calc(8%+22px)] top-1/2 h-16 w-16 -translate-y-1/2 rounded-full bg-primary/30 shadow-inner [transform:translateZ(36px)]" />
+
+          <div className="absolute left-[2%] top-1/2 h-36 w-36 -translate-y-1/2 rounded-full bg-card shadow-lift [transform:translateZ(30px)]" />
+          <div className="absolute left-[calc(2%+34px)] top-1/2 h-[72px] w-[72px] -translate-y-1/2 rounded-full bg-primary/20 [transform:translateZ(42px)]" />
+          <div className="absolute left-[-1%] top-[18px] h-20 w-28 rotate-[30deg] rounded-full bg-[var(--gradient-water)] [transform:translateZ(52px)]" />
+          <div className="absolute left-[-1%] bottom-[18px] h-20 w-28 -rotate-[30deg] rounded-full bg-[var(--gradient-water)] [transform:translateZ(52px)]" />
+          <div className="absolute left-[6%] top-[20px] h-11 w-20 rotate-[30deg] rounded-full bg-card [transform:translateZ(58px)]" />
+          <div className="absolute left-[6%] bottom-[20px] h-11 w-20 -rotate-[30deg] rounded-full bg-card [transform:translateZ(58px)]" />
+        </div>
+      </div>
     </section>
   );
 }
