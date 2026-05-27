@@ -20,7 +20,7 @@ export function WhyUs() {
           {items.map((it, i) => (
             <div
               key={it.title}
-              className="reveal-zoom text-center p-8 rounded-2xl bg-foreground/5 border border-background/10 hover:bg-foreground/10 hover:-translate-y-1 transition-all"
+              className="reveal-rise text-center p-8 rounded-2xl bg-foreground/5 border border-background/10 hover:bg-foreground/10 hover:-translate-y-1 transition-all"
               style={{ transitionDelay: `${i * 140}ms` }}
             >
               <div className="mx-auto w-14 h-14 rounded-2xl gradient-hero text-primary-foreground flex items-center justify-center">
