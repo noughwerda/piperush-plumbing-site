@@ -46,7 +46,7 @@ export function Services() {
           {services.map((s, i) => (
             <div
               key={s.title}
-              className="reveal-zoom group relative bg-card border border-border rounded-2xl p-7 hover:shadow-lift hover:-translate-y-2 hover:border-primary/40 transition-all duration-300"
+              className="reveal-flip group relative bg-card border border-border rounded-2xl p-7 hover:shadow-lift hover:-translate-y-2 hover:border-primary/40 transition-all duration-300"
               style={{ transitionDelay: `${i * 120}ms` }}
             >
               <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
