@@ -7,7 +7,7 @@ import { useEffect } from "react";
  */
 export function useReveal() {
   useEffect(() => {
-    const selector = ".reveal, .reveal-left, .reveal-right, .reveal-zoom, .reveal-blur";
+    const selector = ".reveal, .reveal-left, .reveal-right, .reveal-zoom, .reveal-blur, .reveal-rotate, .reveal-flip, .reveal-rise";
     const els = document.querySelectorAll<HTMLElement>(selector);
     const io = new IntersectionObserver(
       (entries) => {
